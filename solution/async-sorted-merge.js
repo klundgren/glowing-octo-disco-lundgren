@@ -23,7 +23,6 @@ module.exports = async (logSources, printer) => {
 
     await logSourceWithEarliestDate.pop();
 
-    await logSourceWithEarliestDate.pop();
     if (logSourceWithEarliestDate.records.length > 0) {
       const index = logSourcesSortedReverse.findIndex(logSource => logSource.last.date < logSourceWithEarliestDate.last.date);
 
