@@ -1,5 +1,7 @@
 "use strict";
+
 const createProxiedLogSourceCache = require('./log-source-cache');
+const { insertAndMaintainDateOrder } = require('./util/util');
 
 module.exports = async (logSources, printer) => {
 
@@ -24,13 +26,7 @@ module.exports = async (logSources, printer) => {
     await logSourceWithEarliestDate.pop();
 
     if (logSourceWithEarliestDate.records.length > 0) {
-      const index = logSourcesSortedReverse.findIndex(logSource => logSource.last.date < logSourceWithEarliestDate.last.date);
-
-      if (index === -1) {
-        logSourcesSortedReverse.push(logSourceWithEarliestDate);
-      } else {
-        logSourcesSortedReverse.splice(index, 0, logSourceWithEarliestDate);
-      }
+      insertAndMaintainDateOrder(logSourcesSortedReverse, logSourceWithEarliestDate);
     }
   }
 

@@ -1,5 +1,7 @@
 "use strict";
 
+const { insertAndMaintainDateOrder } = require('./util/util');
+
 module.exports = (logSources, printer) => {
 
   logSources.filter(logSource => !logSource.drained).forEach(logSource => logSource.pop());
@@ -15,13 +17,7 @@ module.exports = (logSources, printer) => {
     logSourceWithEarliestDate.pop();
 
     if (!logSourceWithEarliestDate.drained) {
-      const index = logSourcesSortedReverse.findIndex(logSource => logSource.last.date < logSourceWithEarliestDate.last.date);
-
-      if (index === -1) {
-        logSourcesSortedReverse.push(logSourceWithEarliestDate);
-      } else {
-        logSourcesSortedReverse.splice(index, 0, logSourceWithEarliestDate);
-      }
+      insertAndMaintainDateOrder(logSourcesSortedReverse, logSourceWithEarliestDate);
     }
   }
 

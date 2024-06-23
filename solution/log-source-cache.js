@@ -1,17 +1,18 @@
 "use strict";
 
+const CACHE_BATCH_SIZE = require('../const').CACHE_BATCH_SIZE;
+
 class LogSourceCache {
   constructor(logSource) {
     this.logSource = logSource;
     this.last = {};
     this.records = [];
     this.isCacheRefreshInProgress = false;
-    this.batchSize = 1000;
     this.isSourceDrained = false;
   }
   async loadBatch() {
     try {
-      while (this.records.length < this.batchSize && !this.isSourceDrained) {
+      while (this.records.length < CACHE_BATCH_SIZE && !this.isSourceDrained) {
         await this.addRecordToCache();
         this
       }
