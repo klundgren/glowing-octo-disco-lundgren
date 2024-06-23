@@ -1,18 +1,18 @@
 "use strict";
 
-const CACHE_BATCH_SIZE = require('../const').CACHE_BATCH_SIZE;
-
 class LogSourceCache {
-  constructor(logSource) {
+  constructor(logSource, cacheBatchSize) {
     this.logSource = logSource;
+    this.cacheBatchSize = cacheBatchSize; 
     this.last = {};
     this.records = [];
     this.isCacheRefreshInProgress = false;
     this.isSourceDrained = false;
   }
+
   async loadBatch() {
     try {
-      while (this.records.length < CACHE_BATCH_SIZE && !this.isSourceDrained) {
+      while (this.records.length < this.cacheBatchSize && !this.isSourceDrained) {
         await this.addRecordToCache();
         this
       }
@@ -77,8 +77,8 @@ const proxyHandler = {
   }
 };
 
-const createProxiedLogSourceCache = (logSource) => {
-  const logSourceCache = new LogSourceCache(logSource);
+const createProxiedLogSourceCache = (logSource, cacheBatchSize) => {
+  const logSourceCache = new LogSourceCache(logSource, cacheBatchSize);
   return new Proxy(logSourceCache, proxyHandler);
 };
 

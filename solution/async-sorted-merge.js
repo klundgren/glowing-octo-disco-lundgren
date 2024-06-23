@@ -1,5 +1,6 @@
 "use strict";
 
+const { CACHE_SIZE } = require('../const');
 const createProxiedLogSourceCache = require('./log-source-cache');
 const { insertAndMaintainDateOrder } = require('./util/util');
 
@@ -8,7 +9,7 @@ module.exports = async (logSources, printer) => {
   const logSourceCaches = [];
 
   await Promise.all(logSources.map(async logSource => {
-    const cache = createProxiedLogSourceCache(logSource);
+    const cache = createProxiedLogSourceCache(logSource, CACHE_SIZE / logSources.length);
     logSourceCaches.push(cache);
     await cache.loadBatch();
   }));

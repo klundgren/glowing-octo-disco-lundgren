@@ -1,5 +1,5 @@
-const CACHE_BATCH_SIZE = 1000;
+const CACHE_SIZE = 1000000;
 
 module.exports = {
-  CACHE_BATCH_SIZE
+  CACHE_SIZE
 }
